@@ -30,7 +30,12 @@ jobs:
             require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           "
 
-          npm publish --access public
+          # Use --tag for pre-release versions, otherwise publish as latest
+          TAG="latest"
+          if echo "$VERSION" | grep -qE '[-]'; then
+            TAG="next"
+          fi
+          npm publish --access public --tag "$TAG"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
