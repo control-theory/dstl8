@@ -1,0 +1,55 @@
+name: update-flake
+
+on:
+  repository_dispatch:
+    types: [release]
+
+jobs:
+  update:
+    name: update flake.nix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get release info
+        id: release
+        run: |
+          VERSION="${{ github.event.client_payload.version }}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+          # Download SHA256SUMS from the release
+          gh release download "v${VERSION}" --pattern SHA256SUMS --dir /tmp --repo control-theory/dstl8
+
+          # Extract per-platform hashes
+          for pair in "linux_amd64:linux_amd64" "linux_arm64:linux_arm64" "darwin_amd64:darwin_amd64" "darwin_arm64:darwin_arm64"; do
+            key="${pair%%:*}"
+            pattern="dstl8_${VERSION}_${key}.tar.gz"
+            hash="$(grep "$pattern" /tmp/SHA256SUMS | awk '{print $1}')"
+            echo "sha256_${key}=${hash}" >> $GITHUB_OUTPUT
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update flake.nix
+        run: |
+          VERSION="${{ steps.release.outputs.version }}"
+
+          # Update version
+          sed -i "s|version = \".*\";|version = \"${VERSION}\";|" flake.nix
+
+          # Update SHA256 hashes
+          sed -i "/"x86_64-linux"/s|sha256 = \"[a-f0-9]*\"|sha256 = \"${{ steps.release.outputs.sha256_linux_amd64 }}\"|" flake.nix
+          sed -i "/"aarch64-linux"/s|sha256 = \"[a-f0-9]*\"|sha256 = \"${{ steps.release.outputs.sha256_linux_arm64 }}\"|" flake.nix
+          sed -i "/"x86_64-darwin"/s|sha256 = \"[a-f0-9]*\"|sha256 = \"${{ steps.release.outputs.sha256_darwin_amd64 }}\"|" flake.nix
+          sed -i "/"aarch64-darwin"/s|sha256 = \"[a-f0-9]*\"|sha256 = \"${{ steps.release.outputs.sha256_darwin_arm64 }}\"|" flake.nix
+
+      - name: Commit and push
+        run: |
+          VERSION="${{ steps.release.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add flake.nix
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Update flake to v${VERSION}"
+          git push
