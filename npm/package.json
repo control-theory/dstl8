@@ -1,0 +1,33 @@
+{
+  "name": "dstl8",
+  "version": "0.0.0",
+  "description": "CLI and TUI for the dstl8 observability platform",
+  "homepage": "https://dstl8.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/control-theory/dstl8"
+  },
+  "license": "SEE LICENSE IN https://dstl8.ai/terms",
+  "bin": {
+    "dstl8": "bin/dstl8"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "keywords": [
+    "observability",
+    "logging",
+    "tui",
+    "cli",
+    "mcp",
+    "ai"
+  ],
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+}

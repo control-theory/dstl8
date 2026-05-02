@@ -1,0 +1,45 @@
+name: publish-npm
+
+on:
+  repository_dispatch:
+    types: [npm-publish]
+
+jobs:
+  publish:
+    name: publish to npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Update version and publish
+        run: |
+          VERSION="${{ github.event.client_payload.version }}"
+          cd npm
+
+          # Update package.json version to match release
+          node -e "
+            const pkg = require('./package.json');
+            pkg.version = '${VERSION}';
+            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Commit updated version
+        run: |
+          VERSION="${{ github.event.client_payload.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add npm/package.json
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Update npm package to v${VERSION}"
+          git push
