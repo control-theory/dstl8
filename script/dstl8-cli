@@ -1,0 +1,240 @@
+#!/bin/sh
+# dstl8 installer — https://dstl8.ai
+#
+# Usage:
+#   curl -fsSL https://install.dstl8.ai/script/dstl8-cli | sh
+#
+# Options (via env vars):
+#   DSTL8_VERSION      Pin to a specific version (e.g., "0.1.0")
+#   DSTL8_INSTALL_DIR  Install directory (default: /usr/local/bin)
+#
+# Uninstall:
+#   curl -fsSL https://install.dstl8.ai/script/dstl8-cli | sh -s -- --uninstall
+
+set -eu
+
+REPO="control-theory/dstl8"
+BINARY="dstl8"
+GITHUB_API="https://api.github.com"
+GITHUB_RELEASES="https://github.com/${REPO}/releases"
+
+# --- helpers ---
+
+log() {
+  printf '%s\n' "$@"
+}
+
+err() {
+  printf 'Error: %s\n' "$1" >&2
+  exit 1
+}
+
+need_cmd() {
+  if ! command -v "$1" > /dev/null 2>&1; then
+    err "need '$1' (command not found)"
+  fi
+}
+
+# --- detect platform ---
+
+detect_os() {
+  case "$(uname -s)" in
+    Linux*)  echo "linux" ;;
+    Darwin*) echo "darwin" ;;
+    MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
+    *) err "unsupported OS: $(uname -s)" ;;
+  esac
+}
+
+detect_arch() {
+  case "$(uname -m)" in
+    x86_64|amd64)  echo "amd64" ;;
+    aarch64|arm64)  echo "arm64" ;;
+    *) err "unsupported architecture: $(uname -m)" ;;
+  esac
+}
+
+# --- checksum verification ---
+
+verify_checksum() {
+  archive="$1"
+  checksums="$2"
+  filename="$(basename "$archive")"
+
+  expected="$(grep "${filename}" "$checksums" | awk '{print $1}')"
+  if [ -z "$expected" ]; then
+    err "no checksum found for ${filename} in SHA256SUMS"
+  fi
+
+  if command -v sha256sum > /dev/null 2>&1; then
+    actual="$(sha256sum "$archive" | awk '{print $1}')"
+  elif command -v shasum > /dev/null 2>&1; then
+    actual="$(shasum -a 256 "$archive" | awk '{print $1}')"
+  else
+    err "need 'sha256sum' or 'shasum' to verify checksum"
+  fi
+
+  if [ "$expected" != "$actual" ]; then
+    err "checksum mismatch for ${filename}
+  expected: ${expected}
+  actual:   ${actual}
+
+The download may be corrupted or tampered with. Aborting."
+  fi
+}
+
+# --- install directory ---
+
+resolve_install_dir() {
+  if [ -n "${DSTL8_INSTALL_DIR:-}" ]; then
+    echo "$DSTL8_INSTALL_DIR"
+    return
+  fi
+
+  if [ -w "/usr/local/bin" ]; then
+    echo "/usr/local/bin"
+    return
+  fi
+
+  # Try sudo
+  if command -v sudo > /dev/null 2>&1; then
+    echo "/usr/local/bin"
+    return
+  fi
+
+  # Fallback to user directory
+  mkdir -p "${HOME}/.local/bin"
+  echo "${HOME}/.local/bin"
+}
+
+needs_sudo() {
+  dir="$1"
+  if [ -w "$dir" ]; then
+    return 1
+  fi
+  return 0
+}
+
+# --- fetch latest version ---
+
+fetch_latest_version() {
+  need_cmd curl
+
+  version="$(curl -fsSL "${GITHUB_API}/repos/${REPO}/releases/latest" | \
+    grep '"tag_name"' | sed 's/.*"tag_name": *"v\{0,1\}\([^"]*\)".*/\1/')"
+
+  if [ -z "$version" ]; then
+    err "could not determine latest version from GitHub API"
+  fi
+
+  echo "$version"
+}
+
+# --- uninstall ---
+
+do_uninstall() {
+  install_dir="$(resolve_install_dir)"
+  target="${install_dir}/${BINARY}"
+
+  if [ ! -f "$target" ]; then
+    log "${BINARY} not found at ${target}"
+    exit 0
+  fi
+
+  log "Removing ${target}..."
+  if needs_sudo "$install_dir"; then
+    sudo rm -f "$target"
+  else
+    rm -f "$target"
+  fi
+
+  log "${BINARY} has been uninstalled."
+  exit 0
+}
+
+# --- main ---
+
+main() {
+  # Handle --uninstall
+  for arg in "$@"; do
+    case "$arg" in
+      --uninstall) do_uninstall ;;
+    esac
+  done
+
+  need_cmd curl
+  need_cmd tar
+
+  os="$(detect_os)"
+  arch="$(detect_arch)"
+
+  if [ "$os" = "windows" ]; then
+    err "this installer does not support Windows. Download from: ${GITHUB_RELEASES}"
+  fi
+
+  # Resolve version
+  if [ -n "${DSTL8_VERSION:-}" ]; then
+    version="$DSTL8_VERSION"
+    log "Installing ${BINARY} v${version} (pinned)..."
+  else
+    log "Fetching latest version..."
+    version="$(fetch_latest_version)"
+    log "Installing ${BINARY} v${version}..."
+  fi
+
+  # Build download URLs
+  archive_name="${BINARY}_${version}_${os}_${arch}.tar.gz"
+  archive_url="${GITHUB_RELEASES}/download/v${version}/${archive_name}"
+  checksums_url="${GITHUB_RELEASES}/download/v${version}/SHA256SUMS"
+
+  # Download to temp directory
+  tmpdir="$(mktemp -d)"
+  trap 'rm -rf "$tmpdir"' EXIT
+
+  log "Downloading ${archive_name}..."
+  curl -fsSL -o "${tmpdir}/${archive_name}" "$archive_url" || \
+    err "failed to download ${archive_url}"
+
+  log "Downloading checksums..."
+  curl -fsSL -o "${tmpdir}/SHA256SUMS" "$checksums_url" || \
+    err "failed to download SHA256SUMS"
+
+  # Verify checksum
+  log "Verifying checksum..."
+  verify_checksum "${tmpdir}/${archive_name}" "${tmpdir}/SHA256SUMS"
+
+  # Extract
+  tar -xzf "${tmpdir}/${archive_name}" -C "$tmpdir"
+
+  # Install
+  install_dir="$(resolve_install_dir)"
+  target="${install_dir}/${BINARY}"
+
+  if needs_sudo "$install_dir"; then
+    log "Installing to ${target} (requires sudo)..."
+    sudo install -m 755 "${tmpdir}/${BINARY}" "$target"
+  else
+    log "Installing to ${target}..."
+    install -m 755 "${tmpdir}/${BINARY}" "$target"
+  fi
+
+  # Verify
+  if ! command -v "$BINARY" > /dev/null 2>&1; then
+    log ""
+    log "Installed to ${target}, but ${install_dir} is not in your PATH."
+    log "Add it with:"
+    log "  export PATH=\"${install_dir}:\$PATH\""
+    log ""
+  fi
+
+  log ""
+  log "dstl8 v${version} installed successfully!"
+  "$target" version 2>/dev/null || true
+  log ""
+  log "Get started:"
+  log "  dstl8 login       # authenticate with your org"
+  log "  dstl8 tui         # launch the interactive TUI"
+  log "  dstl8 --help      # see all commands"
+}
+
+main "$@"
