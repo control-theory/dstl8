@@ -1,0 +1,22 @@
+{
+  "manifest_version": "0.4",
+  "name": "dstl8",
+  "display_name": "Dstl8",
+  "version": "{{VERSION}}",
+  "description": "Query logs, sentiment, anomalies, and incidents from your Dstl8 observability platform.",
+  "author": {
+    "name": "ControlTheory",
+    "url": "https://dstl8.ai"
+  },
+  "repository": "https://github.com/control-theory/dstl8",
+  "homepage": "https://dstl8.ai",
+  "server": {
+    "type": "node",
+    "entry_point": "server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server.js"]
+    }
+  },
+  "tools_generated": true
+}
