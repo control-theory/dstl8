@@ -1,6 +1,8 @@
-# dstl8
+# Dstl8
 
-CLI and TUI for the [dstl8](https://dstl8.ai) observability platform. Query logs, manage incidents, view sentiment heatmaps, and connect AI agents to your infrastructure — all from the terminal.
+Dstl8 continuous runtime feedback distills, detects, correlates, and explains problems to keep you out of debug rabbit holes. Context streams back into Claude Code, Cursor, and your dev flow. Always-on monitoring surfaces patterns, anomalies, and incidents across your full deployment chain — Supabase, Vercel, Railway, AWS, Kubernetes, OpenTelemetry, and more. Powered by Möbius agents, MCP server, and the Dstl8 CLI.
+
+Try the Dstl8 CLI and TUI for [Dstl8](https://dstl8.ai) continous runtime feedback loops. Get incidents, runtime context, log patterns, debug runtime issues, and connect AI agents to your infrastructure — all from the terminal.
 
 ## Install
 
