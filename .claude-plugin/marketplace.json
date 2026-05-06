@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dstl8",
+  "description": "Dstl8: AI-native observability with incident triage, root cause analysis, deployment verification, and cross-environment correlation.",
+  "owner": {
+    "name": "ControlTheory",
+    "email": "support@controltheory.com",
+    "url": "https://controltheory.com"
+  },
+  "plugins": [
+    {
+      "name": "dstl8",
+      "source": "./",
+      "category": "observability",
+      "tags": ["observability", "incidents", "mcp", "ai-native", "production"]
+    }
+  ]
+}
