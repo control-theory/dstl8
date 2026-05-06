@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "dstl8",
-  "description": "Dstl8: AI-native observability with incident triage, root cause analysis, deployment verification, and cross-environment correlation.",
+  "description": "Dstl8: AI-native observability that distills logs into answers. Sentiment, patterns, and incidents surfaced automatically. Find out what broke before your customers do.",
   "owner": {
     "name": "ControlTheory",
     "email": "support@controltheory.com",
@@ -12,7 +12,7 @@
       "name": "dstl8",
       "source": "./",
       "category": "observability",
-      "tags": ["observability", "incidents", "mcp", "ai-native", "production"]
+      "tags": ["observability", "incidents", "ai-native", "mcp", "vercel", "supabase", "kubernetes", "cloudwatch", "debug", "triage"]
     }
   ]
 }
