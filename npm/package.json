@@ -1,13 +1,13 @@
 {
   "name": "dstl8",
   "version": "0.2.0",
-  "description": "CLI and TUI for the dstl8 observability platform",
+  "description": "CLI and TUI for the Dstl8 runtime feedback loop for AI. Distills, detects, correlates, and explains runtime problems to keep you out of debug rabbit holes. Context streams back into Claude Code, Cursor, and your dev flow. Always-on monitoring surfaces patterns, anomalies, and incidents across your full deployment chain — Supabase, Vercel, Railway, AWS, Kubernetes, OpenTelemetry, and more. Powered by Möbius agents, MCP server, and the Dstl8 CLI.",
   "homepage": "https://dstl8.ai",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/control-theory/dstl8.git"
   },
-  "license": "SEE LICENSE IN https://dstl8.ai/terms",
+  "license": "SEE LICENSE IN https://github.com/control-theory/dstl8?tab=License-1-ov-file#readme",
   "bin": {
     "dstl8": "bin/dstl8"
   },
@@ -16,7 +16,9 @@
   },
   "keywords": [
     "observability",
-    "logging",
+    "claude",
+    "logs",
+    "debugging",
     "tui",
     "cli",
     "mcp",
