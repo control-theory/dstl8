@@ -4,6 +4,9 @@ on:
   repository_dispatch:
     types: [release]
 
+permissions:
+  contents: write
+
 jobs:
   update:
     name: update flake.nix
