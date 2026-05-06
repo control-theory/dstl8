@@ -1,6 +1,6 @@
 {
   "name": "dstl8",
-  "version": "0.1.1-test",
+  "version": "0.2.0",
   "description": "CLI and TUI for the dstl8 observability platform",
   "homepage": "https://dstl8.ai",
   "repository": {
