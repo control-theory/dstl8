@@ -4,6 +4,9 @@ on:
   repository_dispatch:
     types: [npm-publish]
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     name: publish to npm
