@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "dstl8": {
+      "command": "dstl8",
+      "args": ["mcp"]
+    }
+  }
+}

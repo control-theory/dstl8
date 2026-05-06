@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dstl8",
+  "description": "Dstl8: the runtime feedback loop for the AI SDLC. Continuous runtime context from Vercel, Supabase, Kubernetes, AWS, and OpenTelemetry, fed back into your AI coding flow. Find out what broke before your customers do.",
+  "owner": {
+    "name": "ControlTheory",
+    "email": "support@controltheory.com",
+    "url": "https://controltheory.com"
+  },
+  "plugins": [
+    {
+      "name": "dstl8",
+      "source": "./",
+      "category": "debugging",
+      "tags": ["ai-sdlc", "runtime-feedback", "observability", "mcp", "claude-code", "vercel", "supabase", "kubernetes", "opentelemetry"]
+    }
+  ]
+}

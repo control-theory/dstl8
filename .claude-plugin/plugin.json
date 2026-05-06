@@ -1,0 +1,23 @@
+{
+  "name": "dstl8",
+  "version": "0.1.5",
+  "description": "Set up and use Dstl8 for AI-native observability. Triggers on: install or configure Dstl8 (CLI, sources, MCP); incident triage; root cause analysis; deployment verification; cross-environment correlation; pre-coding production context. Installing this plugin auto-registers the Dstl8 MCP server in Claude Code (the CLI must be installed and authenticated separately — the skill walks through it).",
+  "author": {
+    "name": "ControlTheory",
+    "email": "support@controltheory.com",
+    "url": "https://controltheory.com"
+  },
+  "homepage": "https://controltheory.com/product/dstl8",
+  "repository": "https://github.com/control-theory/dstl8",
+  "license": "Proprietary",
+  "keywords": [
+    "observability",
+    "incidents",
+    "root-cause",
+    "mcp",
+    "ai-native",
+    "production",
+    "deployment-verification",
+    "feedback-loop"
+  ]
+}
