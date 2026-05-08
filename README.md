@@ -48,6 +48,17 @@ Verify with `dstl8 version`.
 
 Download `dstl8.mcpb` from the [latest release](https://github.com/control-theory/dstl8/releases/latest) and double-click to install. Requires the dstl8 CLI installed and authenticated.
 
+### Claude Code plugin and skill
+
+This repo contains a Claude Code plugin with a guided setup and investigation skill. To install:
+
+```
+/plugin marketplace add control-theory/dstl8
+/plugin install dstl8@dstl8
+```
+
+The plugin auto-registers the MCP server. The skill walks Claude through CLI install, source configuration, and investigation flows. See `skills/dstl8/` for the skill content.
+
 ## Sign up and sign in
 
 ```bash
@@ -288,6 +299,7 @@ Use `--profile <name>` on any command to run it against a specific profile witho
 
 - [dstl8.ai](https://dstl8.ai)
 - [Documentation](https://docs.controltheory.com/controltheory-documentation/dstl8-docs)
+- [Discord](https://discord.gg/nRBUFYByta)
 - [Releases](https://github.com/control-theory/dstl8/releases)
 - [Homebrew tap](https://github.com/control-theory/homebrew-dstl8)
 - [Issues](https://github.com/control-theory/dstl8/issues)
