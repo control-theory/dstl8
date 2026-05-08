@@ -1,5 +1,9 @@
 # dstl8
 
+[![Docs](https://img.shields.io/badge/Docs-Getting%20Started-cyan.svg)](https://docs.controltheory.com/controltheory-documentation/dstl8-docs)
+[![skills.sh](https://img.shields.io/badge/skills.sh-control--theory%2Fdstl8-blue)](https://skills.sh/control-theory/dstl8)
+[![Release](https://img.shields.io/github/v/release/control-theory/dstl8)](https://github.com/control-theory/dstl8/releases)
+
 Dstl8 continuous runtime feedback distills, detects, correlates, and explains problems to keep you out of debug rabbit holes. Context streams back into Claude Code, Cursor, and your dev flow. Always-on monitoring surfaces patterns, anomalies, and incidents across your full deployment chain: Supabase, Vercel, Railway, AWS, Kubernetes, OpenTelemetry, and more. Powered by Möbius agents, MCP server, and the Dstl8 CLI.
 
 Try the Dstl8 CLI and TUI for __[Dstl8](https://dstl8.ai/)__ continuous runtime feedback loops. Get incidents, runtime context, log patterns, debug runtime issues, and connect AI agents to your infrastructure, all from the terminal.
