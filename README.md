@@ -50,7 +50,7 @@ Download `dstl8.mcpb` from the [latest release](https://github.com/control-theor
 
 ### Claude Code plugin and skill
 
-This repo ships a Claude Code plugin with a guided setup and investigation skill. To install:
+This repo contains a Claude Code plugin with a guided setup and investigation skill. To install:
 
 ```
 /plugin marketplace add control-theory/dstl8
