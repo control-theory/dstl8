@@ -299,6 +299,7 @@ Use `--profile <name>` on any command to run it against a specific profile witho
 
 - [dstl8.ai](https://dstl8.ai)
 - [Documentation](https://docs.controltheory.com/controltheory-documentation/dstl8-docs)
+- [Discord](https://discord.gg/nRBUFYByta)
 - [Releases](https://github.com/control-theory/dstl8/releases)
 - [Homebrew tap](https://github.com/control-theory/homebrew-dstl8)
 - [Issues](https://github.com/control-theory/dstl8/issues)
