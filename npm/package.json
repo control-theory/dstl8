@@ -1,6 +1,7 @@
 {
   "name": "dstl8",
   "version": "0.2.1",
+  "mcpName": "io.github.control-theory/dstl8",
   "description": "CLI and TUI for the Dstl8 runtime feedback loop for AI. Distills, detects, correlates, and explains runtime problems to keep you out of debug rabbit holes. Context streams back into Claude Code, Cursor, and your dev flow. Always-on monitoring surfaces patterns, anomalies, and incidents across your full deployment chain — Supabase, Vercel, Railway, AWS, Kubernetes, OpenTelemetry, and more. Powered by Möbius agents, MCP server, and the Dstl8 CLI.",
   "homepage": "https://dstl8.ai",
   "repository": {

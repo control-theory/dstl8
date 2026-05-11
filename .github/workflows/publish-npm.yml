@@ -33,6 +33,18 @@ jobs:
             require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           "
 
+          cd ..
+
+          # Update server.json version to match release
+          node -e "
+            const server = require('./server.json');
+            server.version = '${VERSION}';
+            server.packages[0].version = '${VERSION}';
+            require('fs').writeFileSync('server.json', JSON.stringify(server, null, 2) + '\n');
+          "
+
+          cd npm
+
           # Use --tag for pre-release versions, otherwise publish as latest
           TAG="latest"
           if echo "$VERSION" | grep -qE '[-]'; then
@@ -47,7 +59,7 @@ jobs:
           VERSION="${{ github.event.client_payload.version }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add npm/package.json
+          git add npm/package.json server.json
           git diff --cached --quiet && echo "No changes" && exit 0
-          git commit -m "Update npm package to v${VERSION}"
+          git commit -m "Update npm package and MCP registry manifest to v${VERSION}"
           git push

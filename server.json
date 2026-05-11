@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.control-theory/dstl8",
+  "description": "Runtime feedback loop for the AI SDLC. Möbius agent: root cause, impact, and fix recommendations.",
+  "repository": {
+    "url": "https://github.com/control-theory/dstl8",
+    "source": "github"
+  },
+  "websiteUrl": "https://www.controltheory.com/product/dstl8/",
+  "version": "0.2.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "dstl8",
+      "version": "0.2.1",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}
