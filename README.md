@@ -1,4 +1,4 @@
-# dstl8
+# Dstl8
 
 [![Docs](https://img.shields.io/badge/Docs-Getting%20Started-cyan.svg)](https://docs.controltheory.com/controltheory-documentation/dstl8-docs)
 [![skills.sh](https://img.shields.io/badge/skills.sh-control--theory%2Fdstl8-blue)](https://skills.sh/control-theory/dstl8)
