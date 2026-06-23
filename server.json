@@ -7,13 +7,15 @@
     "source": "github"
   },
   "websiteUrl": "https://www.controltheory.com/product/dstl8/",
-  "version": "0.2.1",
+  "version": "0.2.5",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "dstl8",
-      "version": "0.2.1",
-      "transport": { "type": "stdio" }
+      "version": "0.2.5",
+      "transport": {
+        "type": "stdio"
+      }
     }
   ]
 }
