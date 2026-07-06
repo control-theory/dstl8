@@ -28,7 +28,9 @@ Before running any workflow below, verify Dstl8 is set up:
 3. MCP server installed and the AI client restarted (`dstl8 install status`)
 
 If any of these are missing, **read `setup.md` from this skill directory
-and complete setup first.** Do not attempt setup from memory.
+and complete setup first.** Do not attempt setup from memory. `setup.md`
+covers both onboarding paths: the guided one-command `dstl8 setup` (which
+the user runs themselves) and the skill-driven step-by-step flow.
 
 If Dstl8 tools aren't visible even after setup is reportedly complete:
 > "I don't see a Dstl8 MCP server connected. Check `dstl8 install status`,

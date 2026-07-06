@@ -10,23 +10,44 @@ Try the Dstl8 CLI and TUI for __[Dstl8](https://dstl8.ai/)__ continuous runtime 
 
 ## Quick start
 
-The flow: sign up, sign in, add sources, install MCP.
+Install the CLI, then run the guided setup — it walks you through everything else:
 
 ```bash
 # 1. Install the CLI
 brew install control-theory/dstl8/dstl8
 
-# 2. Create a Dstl8 account (or `dstl8 login` if you already have one)
-dstl8 signup
+# 2. Guided onboarding: account, MCP install, sources, dashboard
+dstl8 setup
+```
 
-# 3. Add a source so logs flow in
-dstl8 sources add vercel
+`dstl8 setup` is the fastest path. It creates (or detects) your account, installs the MCP server into your AI coding agents, auto-detects data sources on your machine, and opens the dashboard. Every step is optional — skip any with `:skip` and run it later.
 
-# 4. Connect your AI agent
-dstl8 install claude-code
+Prefer to do it by hand? Run the steps individually:
+
+```bash
+dstl8 signup                # create a Dstl8 account (or `dstl8 login` if you have one)
+dstl8 sources add vercel    # add a source so logs flow in
+dstl8 install claude-code   # connect your AI agent
 ```
 
 Once MCP is connected, your AI agent can investigate incidents, query logs, and analyze patterns through Dstl8 directly.
+
+## Guided setup
+
+`dstl8 setup` runs the full onboarding flow end-to-end. Each step is optional — press Enter to accept the default, or type `:skip` at any prompt to move on.
+
+```bash
+dstl8 setup
+```
+
+| Step | What it does |
+|------|--------------|
+| **1. Account** | Creates your account via GitHub or browser signup (skipped if you're already logged in) |
+| **2. AI agent integration** | Installs the Dstl8 MCP server into detected AI coding agents (Claude Code, Codex, Cursor, and more) |
+| **3. Data sources** | Auto-detects sources on your machine — Kubernetes contexts, AWS credentials, Vercel/Supabase/GitHub configs — and sets up the ones you pick |
+| **4. Explore** | Opens the interactive TUI or the web dashboard |
+
+Your organization comes preloaded with demo data, so there's something to explore right away. Re-run `dstl8 setup` anytime to pick up steps you skipped, or run `dstl8 tui` to open the dashboard directly.
 
 ## Install
 
@@ -66,12 +87,17 @@ The plugin auto-registers the MCP server. The skill walks Claude through CLI ins
 ## Sign up and sign in
 
 ```bash
-dstl8 signup            # new account; creates a Default workspace
-dstl8 login             # existing account or new device
-dstl8 profiles          # list profiles; ► marks the active one
-dstl8 switch <profile>  # change the active profile
-dstl8 logout            # log out of the current profile
+dstl8 signup                    # new account; GitHub-first, creates a Default workspace
+dstl8 signup --method browser   # use the web signup flow instead of GitHub
+dstl8 signup --no-github        # skip GitHub, fall back to browser signup
+dstl8 login                     # existing account or new device
+dstl8 login --session <token>   # log in with a session token from the web UI (no browser)
+dstl8 profiles                  # list profiles; ► marks the active one
+dstl8 switch <profile>          # change the active profile
+dstl8 logout                    # log out of the current profile
 ```
+
+`dstl8 signup` defaults to GitHub authentication (`--method gh`) and automatically falls back to the device/browser flow when needed. Pass `--method device` or `--method browser` to choose explicitly.
 
 On first run the CLI exchanges the browser session for a long-lived API token (365 days) stored under `~/.config/dstl8/`. Multiple profiles for different organizations are supported.
 
@@ -89,6 +115,8 @@ dstl8 sources add github
 ```
 
 For pull-based sources (`kubernetes`, `cloudwatch`), the CLI verifies the connection before exiting. For webhook-based sources (`vercel`, `supabase`, `otlp`, `github`), the wizard prints a webhook URL and any auto-generated tokens. Paste those into the upstream provider to complete the setup.
+
+After a source is created, the CLI assigns it to a workspace so its logs start showing up: it auto-assigns when you have a single workspace, and shows a picker when you have several. `dstl8 setup` uses this same flow when you set up detected sources.
 
 For scripted setups, pass `--yes` with the relevant flags to skip prompts:
 
@@ -123,9 +151,14 @@ dstl8 install                         # interactive picker
 dstl8 install --all                   # install to every detected client
 dstl8 install claude-code             # install to a specific client
 dstl8 install status                  # see what's installed where
+dstl8 install list                    # list all supported targets
 dstl8 install --dry-run               # preview without writing
 dstl8 install --project               # project-scoped instead of user-scoped
 dstl8 install --include-experimental  # include cursor, windsurf
+dstl8 install emit --format json      # print the config block for manual install
+
+dstl8 uninstall claude-code           # remove from a specific client
+dstl8 uninstall --all                 # remove from every client
 ```
 
 Supported clients:

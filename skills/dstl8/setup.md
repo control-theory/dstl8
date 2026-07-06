@@ -13,6 +13,40 @@ pre-detected. This file covers direct entry where no Gonzo context exists.
 
 ---
 
+## Two ways to set up
+
+There are two onboarding paths. Pick based on how much the user wants to
+drive versus how much they want you to drive.
+
+**Guided one-command (`dstl8 setup`).** The CLI ships a single command
+that walks the user through account → MCP install → source detection →
+dashboard, each step optional (skip with `:skip`). It is **fully
+interactive** — browser OAuth, interactive pickers, source wizards, and
+it opens the TUI at the end. The bash tool cannot complete the browser
+callback or drive the pickers, so **you never run `dstl8 setup`
+yourself.** Offer it when the user just wants the fastest path and is
+happy to click through prompts in their own terminal:
+
+> "For a guided one-command setup, run `dstl8 setup` in your terminal —
+> it walks you through account, MCP install, and source detection. Tell
+> me when it's done and I'll verify. Or I can set things up here
+> step by step."
+
+After the user says they've finished, jump straight to
+**"Confirming setup is complete"** to verify the three gates.
+
+**Skill-driven (the rest of this file).** You drive setup step by step:
+two-pass platform detection, non-interactive `sources add --yes`,
+explicit workspace assignment, batched webhook instructions. This gives
+you more visibility and control, and lets you detect platforms the
+one-command flow's local detection might miss. **Default to this path**
+when the user wants help, when setup is partial, or when precise
+control matters. It is the flow documented in Steps 1–10 below.
+
+Both paths end at the same verification gates.
+
+---
+
 ## CLI path resolution
 
 Every `dstl8` invocation uses:
@@ -31,6 +65,7 @@ path.
 
 | Command | Reason | Skill action |
 |---------|--------|--------------|
+| `$DSTL8 setup` | Fully interactive guided flow: browser OAuth, interactive pickers, source wizards, opens the TUI. Bash tool can't complete the callback or drive the pickers. | Output the command, let the user run it in their own terminal, then verify (see "Two ways to set up"). |
 | `$DSTL8 tui` | Full-screen TUI, requires interactive terminal. | Output the command, instruct user to run it. |
 | `$DSTL8 signup` / `$DSTL8 login` | Opens user's browser and waits for OAuth callback to a local server. Bash tool can invoke the command, but the callback won't reach the user's browser. | Output the command, wait for user confirmation that auth is complete. |
 | Interactive `$DSTL8 sources add` for `vercel`, `supabase`, `otlp`, `github` | Wizard prints auto-generated webhook secrets the user must see directly. Skill running this becomes a middleman for sensitive values. | Output the command, instruct user to run it and share what was printed. |
@@ -78,7 +113,13 @@ won't complete from the bash tool. User must run the command themselves.
 | Situation | Command |
 |-----------|---------|
 | New to Dstl8 | `$DSTL8 signup` |
+| New to Dstl8, prefer browser over GitHub | `$DSTL8 signup --method browser` |
 | Existing account | `$DSTL8 login` |
+| Existing account, has a session token from the web UI | `$DSTL8 login --session <token>` |
+
+`dstl8 signup` defaults to GitHub authentication and falls back to the
+device/browser flow automatically. Pass `--method browser` (or
+`--no-github`) if the user would rather not use GitHub.
 
 After the user confirms, verify:
 
@@ -275,7 +316,13 @@ Healthy in `dstl8 sources` once events arrive.
 
 ### Always assign explicitly to the target workspace
 
-After every `sources add` (whether the skill ran it or the user did):
+Newer CLI versions auto-assign a freshly created source to a workspace:
+in `--yes` mode it auto-assigns when exactly one workspace exists (and
+prints guidance otherwise); the interactive wizard shows a picker when
+several exist. Still run an explicit assign after every `sources add`
+(whether the skill ran it or the user did) — it's idempotent and
+guarantees the source lands in the intended workspace regardless of how
+many exist:
 
 ```bash
 $DSTL8 sources assign <source-name> <workspace>
