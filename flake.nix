@@ -9,16 +9,16 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ] (system:
       let
-        version = "0.2.7";
+        version = "0.2.8";
 
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Map Nix system strings to GoReleaser archive naming.
         platformMap = {
-          "x86_64-linux"   = { os = "linux";  arch = "amd64"; sha256 = "ecf25c5ce86356e09ccbd0972e36bedc4cd2ceaba555dc8ca0e613c5c3176c2c"; };
-          "aarch64-linux"  = { os = "linux";  arch = "arm64"; sha256 = "41b0a728f6efbe29a0a4907752a43de012301da57b407434cc75fdcdd74f9e9f"; };
-          "x86_64-darwin"  = { os = "darwin"; arch = "amd64"; sha256 = "5341dd62ff224a69700d998bfd95932ccc8e5fdf8b5175398fbcf1966bb0c1df"; };
-          "aarch64-darwin" = { os = "darwin"; arch = "arm64"; sha256 = "57fcb4bb3257a90ce4003fc281210d8ca324f4ec60ba88927c974f4e964a8748"; };
+          "x86_64-linux"   = { os = "linux";  arch = "amd64"; sha256 = "bdbeab8ab29aa2c6f53a76a106206493a1fb1af5ac19fd46e61e1ac7a5777fa8"; };
+          "aarch64-linux"  = { os = "linux";  arch = "arm64"; sha256 = "b8eb895ed492f3c552872106eee124aa1a9ab97412daa456992f82eb32da86fc"; };
+          "x86_64-darwin"  = { os = "darwin"; arch = "amd64"; sha256 = "ca366dc41f43d56e9709af0f67ce5f14d247aca0f79159421bd6d54b1edb22d1"; };
+          "aarch64-darwin" = { os = "darwin"; arch = "arm64"; sha256 = "c6e241d45c9651386c862999a5200c944e34fe2e93f8769428734f8c2d8fc6b4"; };
         };
 
         platform = platformMap.${system};
