@@ -6,7 +6,7 @@
 
 ## Why
 
-<!-- Link the change request: Closes control-theory/docs#<n>. Every planned change
+<!-- Link the change request: Closes control-theory/dstl8#<n>. Every planned change
      carries one — it is what ties this merge back to an approved request.
 
      Emergency change with no prior CR? Write EMERGENCY on the line below and ship it,
@@ -15,7 +15,7 @@
      constraints prevent registering first. Do not sit on a production fix waiting for
      a ticket number. -->
 
-CR: control-theory/docs#
+CR: control-theory/dstl8#
 
 ## Depends on
 
