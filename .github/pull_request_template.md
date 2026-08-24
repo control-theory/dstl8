@@ -15,7 +15,7 @@
      constraints prevent registering first. Do not sit on a production fix waiting for
      a ticket number. -->
 
-CR: control-theory/dstl8#
+CR: control-theory/dstl8#<n>
 
 ## Depends on
 
