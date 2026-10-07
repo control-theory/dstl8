@@ -130,6 +130,27 @@ before writing code.
 | 3 | Resolved |
 | 4 | Closed |
 
+## Closing incidents
+
+A close from your Dstl8 token is the user's verdict, exactly like closing in
+the portal: Möbius learns from it. Close with `update_incident`:
+
+- `status`: 3 (resolved) or 4 (closed).
+- `close_reason`: `fixed` (the problem was fixed), `not_an_issue` (expected
+  or benign behaviour, not a real problem), `duplicate` (with `duplicate_of`),
+  or `inaccurate` (the incident's story is wrong or its evidence doesn't hold).
+- `close_note`: one or two sentences saying why — what the lines really are,
+  or what fixed it. It is kept on the incident timeline and becomes part of
+  what Möbius remembers. **Never write the reason into `actions`**; that
+  overwrites Möbius's recommended actions.
+- `remember_as_noise`: only when the user explicitly says this pattern is
+  expected noise that should never open an incident again. It confirms the
+  learned noise pattern immediately; without it the pattern is proposed for
+  the user to review on the workspace's Memory page.
+
+Pick the reason by what the evidence *is*, not by what a log line says about
+itself. Ask before closing on the user's behalf unless they asked you to.
+
 ## Output conventions
 
 Present investigation results as: **Summary** (one sentence) → **Root cause**
